@@ -16,6 +16,7 @@ public class AllocationService<T>
     public void ChangeStrategy(ISelectionStrategy<T> newStrategy)
     {
         Strategy = newStrategy;
+        Console.WriteLine($"Chiến lược phân bổ đã được thay đổi thành: {newStrategy.GetType().Name}");
     }
     public T Allocate(Predicate<T> additionalCondition)
     {

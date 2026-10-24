@@ -13,7 +13,7 @@ public class HighestPriorityStrategy<T> : ISelectionStrategy<T>
     {
         if (candidates == null || candidates.Count == 0)
         {
-            throw new ArgumentException("Danh sách không được rỗng.", nameof(candidates));
+            throw new NoSuitableItemException();
         }
 
         T selectedCandidate = candidates[0];

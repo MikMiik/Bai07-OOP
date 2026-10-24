@@ -41,6 +41,7 @@ public class InMemoryRepository<T> : IRepository<T>
         return TeachingDevices.AsReadOnly();
     }
 
+
     public IReadOnlyList<T> FindAll(Predicate<T> condition)
     {
         ArgumentNullException.ThrowIfNull(condition);
