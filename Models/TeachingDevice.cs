@@ -1,7 +1,8 @@
 using Bai07.Enums;
+using Bai07.Interfaces;
 namespace Bai07.Models;
 
-public abstract class TeachingDevice
+public abstract class TeachingDevice : IIdentifiable
 {
     public string Id { get; }
     public string Name { get; }

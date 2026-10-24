@@ -1,17 +1,31 @@
 namespace Bai07.Models;
 
 using Bai07.Interfaces;
+using Bai07.Enums;
 
 public class AllocationService<T>
  where T : TeachingDevice
 {
-    private readonly IRepository<T> repository;
-    private ISelectionStrategy<T> strategy;
+    public readonly IRepository<T> Repository;
+    public ISelectionStrategy<T> Strategy { get; private set; }
     public AllocationService(IRepository<T> repository, ISelectionStrategy<T> strategy)
     {
-        repository = repository ?? throw new ArgumentNullException(nameof(repository));
-        strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
+        Repository = repository;
+        Strategy = strategy;
     }
-    public void ChangeStrategy(ISelectionStrategy<T> newStrategy);
-    public T Allocate(Predicate<T> additionalCondition);
+    public void ChangeStrategy(ISelectionStrategy<T> newStrategy)
+    {
+        Strategy = newStrategy;
+    }
+    public T Allocate(Predicate<T> additionalCondition)
+    {
+        var availableDevices = Repository.FindAll(device => device.Status == DeviceStatus.Available && device.IsReadyForUse() && additionalCondition(device));
+        if (!availableDevices.Any())
+        {
+            throw new InvalidOperationException("Không có thiết bị nào sẵn sàng để phân bổ.");
+        }
+        var selectedDevice = Strategy.Select(availableDevices);
+        selectedDevice.Borrow();
+        return selectedDevice;
+    }
 }
